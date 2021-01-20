@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux</title>
+    <script src="./redux.min.js"></script>
+    <script src="./immer.umd.production.min.js"></script>
+</head>
+
+<body>
+    <div id="caixa" style="background: blue; width:10px; height: 50px;">
+
+    </div>
+
+    <script>
+
+        const initialState = {
+            name: 'Igor',
+            sobre: {
+                dados: {
+                    idade: 22
+                }
+            }
+        }
+        const obj = immer.produce(initialState, (draft) => {
+            draft.name = 'Eu'
+        })
+        console.log(obj);
+
+        const reducer = immer.produce((state, action) => {
+            switch (action.type) {
+                case 'MUDAR_NOME':
+                    state.name = action.payload
+                    break;
+                case 'MUDAR_IDADE':
+                    state.sobre.dados.idade = action.payload
+                    break;
+
+            }
+        }, initialState)
+
+        const store = Redux.createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+
+        function render() {
+            // const caixa = document.getElementById('caixa')
+            // caixa.style.width = store.getState() + 'px'
+        }
+        // store.subscribe(render)
+        // store.dispatch({ type: 'MODIFICAR_WIDTH', payload: 100 })
+        store.dispatch({ type: 'MUDAR_NOME', payload: 'Maria' })
+        store.dispatch({ type: 'MUDAR_NOME', payload: 'Igor' })
+        store.dispatch({ type: 'MUDAR_NOME', payload: 'Pedro' })
+        store.dispatch({ type: 'MUDAR_IDADE', payload: 10 })
+
+        console.log(store.getState());
+    </script>
+
+
+</body>
+
+</html>
